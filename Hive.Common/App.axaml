@@ -1,0 +1,244 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Hive.Common.HiveApp"
+             RequestedThemeVariant="Dark">
+
+    <Application.Styles>
+        <FluentTheme />
+    </Application.Styles>
+
+    <Application.Resources>
+        <DrawingImage x:Key="BeeStripeIcon">
+            <DrawingGroup>
+                <DrawingGroup.ClipGeometry>
+                    <RectangleGeometry Rect="0.0,0.0,1024.0,1024.0" />
+                </DrawingGroup.ClipGeometry>
+                <GeometryDrawing Brush="#ffffffff">
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="0.0,0.0,1024.0,1024.0" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                <DrawingGroup>
+                    <DrawingGroup.ClipGeometry>
+                        <RectangleGeometry Rect="0.0,0.0,1024.0,1024.0" />
+                    </DrawingGroup.ClipGeometry>
+                    <DrawingGroup>
+                        <DrawingGroup.Transform>
+                            <MatrixTransform
+                                Matrix="-2.87412,-3.51978e-16,3.3390500000000005e-16,-2.72655,1888.97,2819.25" />
+                        </DrawingGroup.Transform>
+                        <GeometryDrawing Brush="#ffffc800">
+                            <GeometryDrawing.Geometry>
+                                <EllipseGeometry RadiusX="192.374" RadiusY="110.029" Center="482.487,698.604" />
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                    </DrawingGroup>
+                    <DrawingGroup>
+                        <DrawingGroup.Transform>
+                            <MatrixTransform
+                                Matrix="-2.87412,-3.51978e-16,3.3390500000000005e-16,-2.72655,1888.97,2639.25" />
+                        </DrawingGroup.Transform>
+                        <GeometryDrawing Brush="#ff3e361a">
+                            <GeometryDrawing.Geometry>
+                                <EllipseGeometry RadiusX="192.374" RadiusY="110.029" Center="482.487,698.604" />
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                    </DrawingGroup>
+                    <DrawingGroup>
+                        <DrawingGroup.Transform>
+                            <MatrixTransform
+                                Matrix="-2.87412,-3.51978e-16,3.3390500000000005e-16,-2.72655,1888.97,2439.25" />
+                        </DrawingGroup.Transform>
+                        <GeometryDrawing Brush="#ffffc800">
+                            <GeometryDrawing.Geometry>
+                                <EllipseGeometry RadiusX="192.374" RadiusY="110.029" Center="482.487,698.604" />
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                    </DrawingGroup>
+                    <DrawingGroup>
+                        <DrawingGroup.Transform>
+                            <MatrixTransform
+                                Matrix="-2.87412,-3.51978e-16,3.3390500000000005e-16,-2.72655,1888.97,2239.25" />
+                        </DrawingGroup.Transform>
+                        <GeometryDrawing Brush="#ff3e361a">
+                            <GeometryDrawing.Geometry>
+                                <EllipseGeometry RadiusX="192.374" RadiusY="110.029" Center="482.487,698.604" />
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                    </DrawingGroup>
+                    <DrawingGroup>
+                        <DrawingGroup.Transform>
+                            <MatrixTransform
+                                Matrix="-2.87412,-3.51978e-16,3.3390500000000005e-16,-2.72655,1888.97,2044.25" />
+                        </DrawingGroup.Transform>
+                        <GeometryDrawing Brush="#ffffc800">
+                            <GeometryDrawing.Geometry>
+                                <EllipseGeometry RadiusX="192.374" RadiusY="110.029" Center="482.487,698.604" />
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                    </DrawingGroup>
+                    <DrawingGroup>
+                        <DrawingGroup.Transform>
+                            <MatrixTransform
+                                Matrix="-2.87412,-3.51978e-16,3.3390500000000005e-16,-2.72655,1888.97,1839.25" />
+                        </DrawingGroup.Transform>
+                        <GeometryDrawing Brush="#ff3e361a">
+                            <GeometryDrawing.Geometry>
+                                <EllipseGeometry RadiusX="192.374" RadiusY="110.029" Center="482.487,698.604" />
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                    </DrawingGroup>
+                    <DrawingGroup>
+                        <DrawingGroup.Transform>
+                            <MatrixTransform Matrix="2.48753e-16,-4.06245,3.27377,2.0046e-16,-756.762,2551.66" />
+                        </DrawingGroup.Transform>
+                        <GeometryDrawing Brush="#35ffffff">
+                            <GeometryDrawing.Geometry>
+                                <PathGeometry
+                                    Figures="M 376.045 398.024 L 376.045 231.159 L 628.11 231.159 L 628.11 398.024 L 502.078 307.729 L 376.045 398.024 Z" />
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                    </DrawingGroup>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage>
+
+        <DrawingImage x:Key="Honeycomb">
+            <DrawingGroup>
+                <DrawingGroup.ClipGeometry>
+                    <RectangleGeometry Rect="0.0,0.0,1024.0,1024.0" />
+                </DrawingGroup.ClipGeometry>
+                <GeometryDrawing Brush="#ffffffff">
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="0.0,0.0,1024.0,1024.0" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                <DrawingGroup>
+                    <DrawingGroup.ClipGeometry>
+                        <RectangleGeometry Rect="0.0,0.0,1024.0,1024.0" />
+                    </DrawingGroup.ClipGeometry>
+                    <DrawingGroup>
+                        <DrawingGroup.Transform>
+                            <MatrixTransform Matrix="1.63626,0.0,0.0,1.63626,-376.76,-383.654" />
+                        </DrawingGroup.Transform>
+                        <GeometryDrawing Brush="#ff3e361a">
+                            <GeometryDrawing.Geometry>
+                                <RectangleGeometry Rect="230.257,234.47,625.817,625.817" />
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                    </DrawingGroup>
+                    <DrawingGroup>
+                        <DrawingGroup.Transform>
+                            <MatrixTransform Matrix="-2.07928,-2.54638e-16,4.45207e-16,-3.63539,1515.22,3051.7" />
+                        </DrawingGroup.Transform>
+                        <GeometryDrawing Brush="#ffffc800">
+                            <GeometryDrawing.Geometry>
+                                <EllipseGeometry RadiusX="192.374" RadiusY="110.029" Center="482.487,698.604" />
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                    </DrawingGroup>
+                    <DrawingGroup>
+                        <DrawingGroup.Transform>
+                            <MatrixTransform
+                                Matrix="-0.207928,-2.5463800000000005e-17,1.11302e-16,-0.908848,712.322,1146.93" />
+                        </DrawingGroup.Transform>
+                        <GeometryDrawing Brush="#ff3e361a">
+                            <GeometryDrawing.Geometry>
+                                <EllipseGeometry RadiusX="192.374" RadiusY="110.029" Center="482.487,698.604" />
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                    </DrawingGroup>
+                    <DrawingGroup>
+                        <DrawingGroup.Transform>
+                            <MatrixTransform
+                                Matrix="-0.207928,-2.5463800000000005e-17,1.11302e-16,-0.908848,512.322,1146.93" />
+                        </DrawingGroup.Transform>
+                        <GeometryDrawing Brush="#ff3e361a">
+                            <GeometryDrawing.Geometry>
+                                <EllipseGeometry RadiusX="192.374" RadiusY="110.029" Center="482.487,698.604" />
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                    </DrawingGroup>
+                    <DrawingGroup>
+                        <DrawingGroup.Transform>
+                            <MatrixTransform Matrix="2.48753e-16,-4.06245,3.27377,2.0046e-16,-756.762,2551.66" />
+                        </DrawingGroup.Transform>
+                        <GeometryDrawing Brush="#35ffffff">
+                            <GeometryDrawing.Geometry>
+                                <PathGeometry
+                                    Figures="M 376.045 398.024 L 376.045 231.159 L 628.11 231.159 L 628.11 398.024 L 502.078 307.729 L 376.045 398.024 Z" />
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                    </DrawingGroup>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage>
+
+        <DrawingImage x:Key="Overlay3">
+            <DrawingGroup>
+                <DrawingGroup.ClipGeometry>
+                    <RectangleGeometry Rect="0.0,0.0,1024.0,1024.0" />
+                </DrawingGroup.ClipGeometry>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="0.0,0.0,1024.0,1024.0" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                <DrawingGroup>
+                    <DrawingGroup.ClipGeometry>
+                        <RectangleGeometry Rect="0.0,0.0,1024.0,1024.0" />
+                    </DrawingGroup.ClipGeometry>
+                    <DrawingGroup>
+                        <DrawingGroup.Transform>
+                            <MatrixTransform Matrix="2.48753e-16,-4.06245,3.27377,2.0046e-16,-756.762,2551.66" />
+                        </DrawingGroup.Transform>
+                        <GeometryDrawing Brush="#33ffffff">
+                            <GeometryDrawing.Geometry>
+                                <PathGeometry
+                                    Figures="M 376.045 398.024 L 376.045 231.159 L 628.11 231.159 L 628.11 398.024 L 502.078 307.729 L 376.045 398.024 Z" />
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                    </DrawingGroup>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage>
+
+        <DrawingImage x:Key="Overlay4">
+            <DrawingGroup>
+                <DrawingGroup.ClipGeometry>
+                    <RectangleGeometry Rect="0.0,0.0,1024.0,1024.0" />
+                </DrawingGroup.ClipGeometry>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="0.0,0.0,1024.0,1024.0" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                <DrawingGroup>
+                    <DrawingGroup.Transform>
+                        <MatrixTransform Matrix="8.42878e-17,-1.37652,1.37652,8.42878e-17,-127.968,1318.39" />
+                    </DrawingGroup.Transform>
+                    <GeometryDrawing Brush="#33ffffff">
+                        <GeometryDrawing.Geometry>
+                            <PathGeometry
+                                Figures="M 585.812 210.652 L 806.011 337.784 L 806.011 592.048 L 585.812 719.179 L 365.614 592.048 L 365.614 337.784 L 585.812 210.652 Z" />
+                        </GeometryDrawing.Geometry>
+                    </GeometryDrawing>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage>
+
+        <DrawingImage x:Key="Overlay5">
+            <DrawingGroup>
+                <DrawingGroup.ClipGeometry>
+                    <RectangleGeometry Rect="0.0,0.0,1024.0,1024.0" />
+                </DrawingGroup.ClipGeometry>
+                <GeometryDrawing Brush="#33ffffff">
+                    <GeometryDrawing.Geometry>
+                        <PathGeometry
+                            Figures="M 1024 0 L 1024 1024 L 0 1024 L 0 0 L 1024 0 Z M 162 512 L 337 815.109 L 687 815.109 L 862 512 L 687 208.891 L 337 208.891 L 162 512 Z" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingGroup>
+        </DrawingImage>
+    </Application.Resources>
+</Application>

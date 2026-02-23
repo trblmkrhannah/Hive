@@ -1,0 +1,47 @@
+app-id: party.trblmkr.hive
+runtime: org.freedesktop.Platform
+runtime-version: '24.08'
+sdk: org.freedesktop.Sdk
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.dotnet10
+
+command: Hive
+
+finish-args:
+  # Display access
+  - --socket=wayland
+  - --socket=x11
+  - --share=ipc
+  # GPU acceleration for rendering
+  - --device=dri
+  # Font access
+  - --filesystem=~/.local/share/fonts:ro
+  - --filesystem=xdg-config/fontconfig:ro
+
+build-options:
+  append-path: /usr/lib/sdk/dotnet10/bin
+  append-ld-library-path: /usr/lib/sdk/dotnet10/lib
+  build-args:
+    - --share=network
+  env:
+    DOTNET_CLI_TELEMETRY_OPTOUT: 'true'
+    DOTNET_NOLOGO: 'true'
+
+modules:
+  - name: hive
+    buildsystem: simple
+    build-options:
+      build-args:
+        - --share=network
+    build-commands:
+      # Restore and publish the application
+      - dotnet publish Hive.Desktop/Hive.Desktop.csproj -c Release -r linux-x64 --self-contained true -o /app/bin
+      # Install desktop file
+      - install -Dm644 party.trblmkr.hive.desktop /app/share/applications/party.trblmkr.hive.desktop
+      # Install metainfo
+      - install -Dm644 party.trblmkr.hive.metainfo.xml /app/share/metainfo/party.trblmkr.hive.metainfo.xml
+      # Install icon
+      - install -Dm644 icons/party.trblmkr.hive.svg /app/share/icons/hicolor/scalable/apps/party.trblmkr.hive.svg
+    sources:
+      - type: dir
+        path: .

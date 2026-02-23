@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>party.trblmkr.hive</id>
+  <name>Hive</name>
+  <summary>Hexagonal puzzle game</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+  
+  <description>
+    <p>
+      Hive is a hexagonal puzzle game where you rotate groups of tiles
+      to match colors and create special pieces.
+    </p>
+    <ul>
+      <li>Match 3 adjacent hexagons of the same color to eliminate them.</li>
+      <li>Create a ring of 6 same-colored hexagons to form a special piece.</li>
+      <li>Create a ring of 6 special pieces to form an even special-er piece.</li>
+    </ul>
+  </description>
+  
+  <launchable type="desktop-id">party.trblmkr.hive.desktop</launchable>
+  
+  <url type="homepage">https://code.trblmkr.party/trblmkrhannah/Hive</url>
+  
+  <provides>
+    <binary>Hive</binary>
+  </provides>
+  
+  <content_rating type="oars-1.1" />
+  
+  <releases>
+    <release version="1.0.0" date="2026-01-26">
+      <description>
+        <p>A hexagon puzzle set in a busy hive!</p>
+        <ul>
+          <li>Spin hexagons to form clusters.</li>
+          <li>Watch out for bombs.</li>
+          <li>Earn special pieces by forming 'hives'.</li>
+        </ul>
+      </description>
+    </release>
+  </releases>
+  
+  <categories>
+    <category>Game</category>
+    <category>LogicGame</category>
+  </categories>
+  
+  <keywords>
+    <keyword>puzzle</keyword>
+    <keyword>hexagon</keyword>
+    <keyword>match</keyword>
+    <keyword>game</keyword>
+    <keyword>logic</keyword>
+  </keywords>
+</component>

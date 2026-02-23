@@ -477,3 +477,19 @@ fabric.properties
 # Android studio 3.1+ serialized cache file
 .idea/caches/build_file_checksums.ser
 
+# Flatpak build artifacts
+build-dir/
+.flatpak-builder/
+repo/
+*.flatpak
+
+# .NET publish output
+publish/
+publish-test/
+
+# JetBrains IDEs
+.idea/
+
+# macOS
+.DS_Store
+

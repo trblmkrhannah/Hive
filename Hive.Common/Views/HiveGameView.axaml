@@ -1,0 +1,192 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:views1="clr-namespace:Hive.Common.Views"
+             mc:Ignorable="d"
+             d:DesignWidth="400"
+             d:DesignHeight="700"
+             x:Class="Hive.Common.Views.HiveGameView"
+             Background="#3E361A">
+
+    <UserControl.Styles>
+        <!-- Button hover effects -->
+        <Style Selector="Button:pointerover">
+            <Setter Property="Opacity" Value="0.85" />
+        </Style>
+        <Style Selector="Button:pressed">
+            <Setter Property="Opacity" Value="0.7" />
+        </Style>
+        <Style Selector="ToggleButton:pointerover">
+            <Setter Property="Opacity" Value="0.85" />
+        </Style>
+        <Style Selector="ToggleButton:checked">
+            <Setter Property="Background" Value="#1a5f7a" />
+        </Style>
+    </UserControl.Styles>
+
+    <!-- Main Grid to support overlay -->
+    <Grid>
+        <!-- Main game content -->
+        <DockPanel>
+            <!-- Top Menu Bar -->
+            <Border DockPanel.Dock="Top"
+                    Background="#CC000000"
+                    Padding="12,10"
+                    BorderBrush="#DD000000"
+                    BorderThickness="0,0,0,2">
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                    <!-- New Game Button -->
+                    <Button Grid.Column="0"
+                            x:Name="NewGameButton"
+                            Content="New Game"
+                            Padding="20,10"
+                            FontSize="14"
+                            FontWeight="SemiBold"
+                            Background="#e94560"
+                            Foreground="White"
+                            CornerRadius="6"
+                            HorizontalContentAlignment="Center"
+                            Cursor="Hand" />
+
+                    <!-- Score Display -->
+                    <StackPanel Grid.Column="1"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                        <TextBlock Text="Score: "
+                                   FontSize="20"
+                                   FontWeight="SemiBold"
+                                   Foreground="#8a8a9a" />
+                        <TextBlock x:Name="ScoreText"
+                                   Text="0"
+                                   FontSize="20"
+                                   FontWeight="Bold"
+                                   Foreground="White"
+                                   MinWidth="60" />
+                    </StackPanel>
+
+                    <!-- Rotation Direction Toggle -->
+                    <ToggleButton Grid.Column="2"
+                                  x:Name="RotationToggle"
+                                  IsChecked="True"
+                                  Padding="14,10"
+                                  FontSize="18"
+                                  Background="#0f3460"
+                                  Foreground="White"
+                                  CornerRadius="6"
+                                  ToolTip.Tip="Toggle rotation direction (clockwise/counter-clockwise)"
+                                  Cursor="Hand">
+                        <Panel>
+                            <TextBlock x:Name="ClockwiseIcon"
+                                       Text="↺"
+                                       IsVisible="True"
+                                       FontSize="22"
+                                       FontWeight="Bold" />
+                            <TextBlock x:Name="CounterClockwiseIcon"
+                                       Text="↻"
+                                       IsVisible="False"
+                                       FontSize="22"
+                                       FontWeight="Bold" />
+                        </Panel>
+                    </ToggleButton>
+                </Grid>
+            </Border>
+
+            <!-- Debug Panel (hidden by default, show with HIVE_DEBUG=1) -->
+            <Border x:Name="DebugPanel"
+                    DockPanel.Dock="Bottom"
+                    Background="#2d2d44"
+                    Padding="8,6"
+                    BorderBrush="#0f3460"
+                    BorderThickness="0,2,0,0"
+                    IsVisible="False">
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Center"
+                            Spacing="10">
+                    <TextBlock Text="Debug:"
+                               FontSize="12"
+                               Foreground="#8a8a9a"
+                               VerticalAlignment="Center" />
+                    <Button x:Name="ExportButton"
+                            Content="Export State"
+                            Padding="12,6"
+                            FontSize="12"
+                            Background="#0f3460"
+                            Foreground="White"
+                            CornerRadius="4"
+                            Cursor="Hand" />
+                    <Button x:Name="ImportButton"
+                            Content="Import State"
+                            Padding="12,6"
+                            FontSize="12"
+                            Background="#0f3460"
+                            Foreground="White"
+                            CornerRadius="4"
+                            Cursor="Hand" />
+                </StackPanel>
+            </Border>
+
+            <!-- Game Canvas -->
+            <views1:GameCanvas x:Name="GameCanvas" ClipToBounds="True" />
+        </DockPanel>
+
+        <!-- Game Over Overlay -->
+        <Border x:Name="GameOverOverlay"
+                Background="#CC000000"
+                IsVisible="False"
+                ZIndex="100">
+            <Border Background="#1a1a2e"
+                    CornerRadius="16"
+                    Padding="50,40"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    BorderBrush="#e94560"
+                    BorderThickness="3"
+                    MinWidth="300">
+                <StackPanel Spacing="24" HorizontalAlignment="Center">
+                    <!-- Game Over Title -->
+                    <TextBlock Text="GAME OVER"
+                               FontSize="36"
+                               FontWeight="Bold"
+                               Foreground="#e94560"
+                               HorizontalAlignment="Center" />
+
+                    <!-- Final Score -->
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                Spacing="8">
+                        <TextBlock Text="Final Score:"
+                                   FontSize="22"
+                                   Foreground="#8a8a9a"
+                                   VerticalAlignment="Center" />
+                        <TextBlock x:Name="FinalScoreText"
+                                   Text="0"
+                                   FontSize="28"
+                                   FontWeight="Bold"
+                                   Foreground="White"
+                                   VerticalAlignment="Center" />
+                    </StackPanel>
+
+                    <!-- Bomb Exploded Message -->
+                    <TextBlock Text="A bomb exploded!"
+                               FontSize="16"
+                               Foreground="#FF6666"
+                               HorizontalAlignment="Center" />
+
+                    <!-- New Game Button -->
+                    <Button x:Name="GameOverNewGameButton"
+                            Content="Play Again"
+                            Padding="30,14"
+                            FontSize="18"
+                            FontWeight="SemiBold"
+                            Background="#e94560"
+                            Foreground="White"
+                            CornerRadius="8"
+                            HorizontalAlignment="Center"
+                            Cursor="Hand" />
+                </StackPanel>
+            </Border>
+        </Border>
+    </Grid>
+</UserControl>

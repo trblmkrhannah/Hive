@@ -1,0 +1,29 @@
+# Build outputs
+**/bin/
+**/obj/
+
+# IDE files
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+
+# Git
+.git/
+.gitignore
+
+# Flatpak build files
+flatpak/
+.flatpak-builder/
+build-dir/
+
+# Desktop project (not needed for browser)
+Hive.Desktop/
+
+# Documentation
+*.md
+LICENSE
+
+# Misc
+*.log

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Hive 🐝</title>
+    <link rel="icon" href="./hive.svg" type="image/svg+xml">
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #1a1a2e;
+        }
+        
+        #out {
+            width: 100%;
+            height: 100%;
+        }
+        
+        #out canvas {
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Loading screen styles */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #1a1a2e;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.3s ease-out;
+        }
+        
+        #loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .hex-loader {
+            width: 80px;
+            height: 92px;
+            position: relative;
+        }
+        
+        .hex-loader::before,
+        .hex-loader::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 46px;
+            background: #e94560;
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+        }
+        
+        .hex-loader::before {
+            top: 0;
+            left: 20px;
+            animation: hex-pulse 1.2s ease-in-out infinite;
+        }
+        
+        .hex-loader::after {
+            bottom: 0;
+            left: 20px;
+            animation: hex-pulse 1.2s ease-in-out infinite 0.6s;
+        }
+                
+        @keyframes hex-pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(0.85);
+                opacity: 0.6;
+            }
+        }
+        
+        .loading-text {
+            margin-top: 30px;
+            color: #8a8a9a;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 16px;
+            letter-spacing: 2px;
+        }
+        
+        .loading-dots::after {
+            content: '';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+        
+        @keyframes dots {
+            0% { content: ''; }
+            25% { content: '.'; }
+            50% { content: '..'; }
+            75% { content: '...'; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading screen -->
+    <div id="loading-screen">
+        <img src="./hive.svg" height="100pt" width="100pt" />
+        <div class="loading-text">Loading<span class="loading-dots"></span></div>
+    </div>
+    
+    <div id="out"></div>
+    <script src="./storage.js"></script>
+    <script type="module">
+        import { dotnet } from './_framework/dotnet.js';
+
+        const is_browser = typeof window != "undefined";
+        if (!is_browser) throw new Error(`Expected to be running in a browser`);
+
+        const dotnetRuntime = await dotnet
+            .withDiagnosticTracing(false)
+            .withApplicationArgumentsFromQuery()
+            .create();
+
+        // Hide loading screen once WASM is ready
+        const loadingScreen = document.getElementById('loading-screen');
+        loadingScreen.classList.add('hidden');
+        setTimeout(() => loadingScreen.remove(), 300);
+
+        await dotnetRuntime.runMain();
+    </script>
+</body>
+</html>

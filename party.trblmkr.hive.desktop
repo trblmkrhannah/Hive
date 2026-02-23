@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Hive
+Comment=Hexagonal Puzzle Game
+Exec=Hive
+Icon=party.trblmkr.hive
+Terminal=false
+Type=Application
+Categories=Game;LogicGame;
+Keywords=puzzle;hexagon;match;game;hive;
+StartupWMClass=Hive

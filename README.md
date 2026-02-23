@@ -62,6 +62,14 @@ docker compose up -d --force-recreate
 Flatpak
 -------
 
-flatpak run party.trblmkr.code.hive
+### Building
 
-flatpak-builder --user --install build-dir party.trblmkr.code.hive.yml --force-clean
+```bash
+flatpak-builder --user --install build-dir party.trblmkr.hive.yml --force-clean
+```
+
+### Running
+
+```bash
+flatpak run party.trblmkr.hive
+```

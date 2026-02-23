@@ -24,7 +24,8 @@ public static class HexMath
 
     /// <summary>
     /// Converts a pixel position to the nearest hex coordinate.
-    /// Uses flat-top orientation.
+    /// Uses flat-top orientation. Inverse of HexToPixel: from x = size*(3/2)*q and
+    /// y = size*sqrt3*(q/2 + r) we get q = (2/3)*px/size, r = (py/sqrt3 - px/3)/size.
     /// </summary>
     public static HexCoordinate PixelToHex(Point pixel, double size, Point origin)
     {

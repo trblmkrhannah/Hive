@@ -28,6 +28,12 @@
 
     <!-- Main Grid to support overlay -->
     <Grid>
+        <!-- Full-app hexagon grid (tiled brush; background colour from UserControl) -->
+        <Border x:Name="HexGridBackgroundLayer"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                IsHitTestVisible="False" Opacity="0.1" />
+
         <!-- Main game content -->
         <DockPanel>
             <!-- Top Menu Bar -->

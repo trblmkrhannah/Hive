@@ -17,6 +17,9 @@ public partial class HiveGameView : UserControl
     {
         InitializeComponent();
 
+        // Full-app hex grid background (tiled brush fills entire area regardless of size)
+        HexGridBackgroundLayer.Background = HexGridBackground.CreateTiledBrush();
+
         // Initialize game controller
         _controller = new GameController();
         

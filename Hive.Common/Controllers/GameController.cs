@@ -1,3 +1,4 @@
+using System.Linq;
 using Avalonia;
 using Hive.Common.Animation;
 using Hive.Common.Models;
@@ -666,7 +667,7 @@ public class GameController
             // When center was a star or pearl:
             // 1. Apply gravity first (tiles fall down, creating empty space at top)
             await ApplyGravityOnly();
-            // 2. Spawn the additional star at the topmost empty position in the column
+            // 2. Spawn the additional star at the lowest vacant position in the column (so it "falls" into place)
             await SpawnAdditionalStarAtTop(center);
             // 3. Spawn regular tiles for remaining empty positions
             await SpawnNewTiles();
@@ -684,20 +685,20 @@ public class GameController
     }
 
     /// <summary>
-    /// Spawns an additional star tile at the top of the grid in the same column as the center.
-    /// Called BEFORE gravity, so the star will fall into position with the gravity system.
-    /// Used when a hexagon is formed around an existing star.
+    /// Spawns an additional star tile from the top; it is placed at the lowest vacant position
+    /// in the center column after gravity has been applied, so it visually "falls" into place.
+    /// Called after ApplyGravityOnly when a hexagon is formed around an existing star/pearl.
     /// </summary>
     private async Task SpawnAdditionalStarAtTop(HexCoordinate center)
     {
         // Get the column of the center piece
         var (centerCol, _) = HexGrid.AxialToOffset(center);
         
-        // Find the topmost empty coordinate in that column
+        // Find the lowest empty coordinate in that column (scan from bottom to top)
+        // so the new star occupies the vacant spot just above existing tiles.
         HexCoordinate? spawnCoord = null;
         
-        // Scan from top to bottom in this column to find the first empty spot
-        for (int row = 0; row < GameState.Grid.Rows; row++)
+        for (int row = GameState.Grid.Rows - 1; row >= 0; row--)
         {
             var coord = HexGrid.OffsetToAxial(centerCol, row);
             if (GameState.Grid.IsValidCoordinate(coord) && GameState.Grid.GetTile(coord) == null)
@@ -707,13 +708,17 @@ public class GameController
             }
         }
         
-        // If no empty spot in that column, try to find any empty spot
+        // If no empty spot in that column, use the lowest empty spot from any column
         if (!spawnCoord.HasValue)
         {
             var emptyCoords = _gravitySystem.GetEmptyTopCoordinates(GameState.Grid);
             if (emptyCoords.Count > 0)
             {
-                spawnCoord = emptyCoords[0].Coordinate;
+                // Prefer same column; otherwise take the last (lowest in column order) empty
+                var inColumn = emptyCoords.Where(e => e.Column == centerCol).ToList();
+                spawnCoord = inColumn.Count > 0
+                    ? inColumn.Last().Coordinate
+                    : emptyCoords.Last().Coordinate;
             }
         }
         

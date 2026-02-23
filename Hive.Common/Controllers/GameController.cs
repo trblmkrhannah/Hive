@@ -599,6 +599,8 @@ public class GameController
         // Check for chain reactions - include additional cleared coords
         var allClearedCoords = matchedCoords.Concat(additionalTilesToClear.Select(t => t.Coordinate)).ToArray();
         await CheckAndProcessMatches(allClearedCoords);
+        
+        UpdateAllTilePositions();
     }
 
     private async Task ProcessHexagonMatch(HexCoordinate center)

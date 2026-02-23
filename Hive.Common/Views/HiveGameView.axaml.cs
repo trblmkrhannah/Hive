@@ -36,8 +36,8 @@ public partial class HiveGameView : UserControl
         GameCanvas.PointerExited += OnCanvasPointerExited;
         
         // Keyboard input for debug controls
-        this.KeyDown += OnKeyDown;
-
+        KeyDown += OnKeyDown;
+        
         _controller.ScoreChanged += OnScoreChanged;
         _controller.MoveCompleted += OnMoveCompleted;
         _controller.GameOver += OnGameOver;
@@ -167,6 +167,8 @@ public partial class HiveGameView : UserControl
             // Try to load saved game on startup
             StartNewGame(tryLoadSave: true);
             _isInitialized = true;
+            // Take focus so KeyDown (debug bindings) works without clicking the canvas first
+            this.Focus();
         }, DispatcherPriority.Loaded);
     }
 
@@ -279,6 +281,8 @@ public partial class HiveGameView : UserControl
 
     private void OnCanvasPointerPressed(object? sender, PointerPressedEventArgs e)
     {
+        // Take focus so KeyDown (debug bindings) is received
+        this.Focus();
         _inputHandler.OnPointerPressed(e);
     }
 

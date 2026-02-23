@@ -752,9 +752,13 @@ public class GameController
 
     /// <summary>
     /// Processes a star hexagon match (6 stars surrounding a center) - creates a pearl.
+    /// If the center is already a pearl, the existing pearl is kept and an additional pearl falls from the top.
     /// </summary>
     private async Task ProcessStarHexagonMatch(HexCoordinate center)
     {
+        var centerTile = GameState.Grid.GetTile(center);
+        bool centerWasPearl = centerTile?.IsPearl ?? false;
+
         // Get the 6 star tiles around the center
         var neighborCoords = center.GetAllNeighbors();
         var tilesToEliminate = new List<HexTile>();
@@ -780,27 +784,99 @@ public class GameController
             GameState.Grid.RemoveTile(coord);
         }
 
-        // Remove center tile and create pearl at center
-        GameState.Grid.RemoveTile(center);
-        var pearlTile = _spawner.SpawnPearlTile(center);
-        GameState.Grid.SetTile(center, pearlTile);
-        
-        if (_coordToScreen != null)
+        if (centerWasPearl)
         {
-            pearlTile.ScreenPosition = _coordToScreen(center);
-            pearlTile.TargetPosition = pearlTile.ScreenPosition;
+            // Center is already a pearl: keep it, apply gravity, spawn additional pearl falling from top
+            GameState.AddStarEliminationScore(6);
+            GameState.AddMatchScore(0, createdPearl: true);
+            ScoreChanged?.Invoke(GameState.Score);
+
+            await ApplyGravityOnly();
+            await SpawnAdditionalPearlAtTop(center);
+            await SpawnNewTiles();
         }
+        else
+        {
+            // Remove center tile and create pearl at center
+            GameState.Grid.RemoveTile(center);
+            var pearlTile = _spawner.SpawnPearlTile(center);
+            GameState.Grid.SetTile(center, pearlTile);
+            
+            if (_coordToScreen != null)
+            {
+                pearlTile.ScreenPosition = _coordToScreen(center);
+                pearlTile.TargetPosition = pearlTile.ScreenPosition;
+            }
 
-        // Update score (6 star tiles eliminated + pearl bonus)
-        GameState.AddStarEliminationScore(6);
-        GameState.AddMatchScore(0, createdPearl: true); // Just add pearl bonus
-        ScoreChanged?.Invoke(GameState.Score);
+            // Update score (6 star tiles eliminated + pearl bonus)
+            GameState.AddStarEliminationScore(6);
+            GameState.AddMatchScore(0, createdPearl: true); // Just add pearl bonus
+            ScoreChanged?.Invoke(GameState.Score);
 
-        // Apply gravity and spawn new tiles
-        await ApplyGravityAndSpawn();
+            // Apply gravity and spawn new tiles
+            await ApplyGravityAndSpawn();
+        }
 
         // Check for chain reactions
         await CheckAndProcessMatches(neighborCoords);
+    }
+
+    /// <summary>
+    /// Spawns an additional pearl tile from the top; it is placed at the lowest vacant position
+    /// in the center column after gravity has been applied, so it visually "falls" into place.
+    /// Called when a star hexagon is formed around an existing pearl.
+    /// </summary>
+    private async Task SpawnAdditionalPearlAtTop(HexCoordinate center)
+    {
+        var (centerCol, _) = HexGrid.AxialToOffset(center);
+        
+        HexCoordinate? spawnCoord = null;
+        
+        for (int row = GameState.Grid.Rows - 1; row >= 0; row--)
+        {
+            var coord = HexGrid.OffsetToAxial(centerCol, row);
+            if (GameState.Grid.IsValidCoordinate(coord) && GameState.Grid.GetTile(coord) == null)
+            {
+                spawnCoord = coord;
+                break;
+            }
+        }
+        
+        if (!spawnCoord.HasValue)
+        {
+            var emptyCoords = _gravitySystem.GetEmptyTopCoordinates(GameState.Grid);
+            if (emptyCoords.Count > 0)
+            {
+                var inColumn = emptyCoords.Where(e => e.Column == centerCol).ToList();
+                spawnCoord = inColumn.Count > 0
+                    ? inColumn.Last().Coordinate
+                    : emptyCoords.Last().Coordinate;
+            }
+        }
+        
+        if (spawnCoord.HasValue)
+        {
+            var pearlTile = _spawner.SpawnPearlTile(spawnCoord.Value);
+            GameState.Grid.SetTile(spawnCoord.Value, pearlTile);
+
+            var endPos = _coordToScreen?.Invoke(spawnCoord.Value) ?? new Point();
+            var topOfColumnCoord = HexGrid.OffsetToAxial(centerCol, 0);
+            var topOfColumnPos = _coordToScreen?.Invoke(topOfColumnCoord) ?? new Point();
+            var startPos = new Point(topOfColumnPos.X, topOfColumnPos.Y - (_getHexSize?.Invoke() ?? 40) * 2);
+            
+            pearlTile.ScreenPosition = startPos;
+            
+            var spawnAnim = new SpawnAnimation(
+                new List<HexTile> { pearlTile }, 
+                new[] { startPos }, 
+                new[] { endPos });
+            
+            var animationComplete = new TaskCompletionSource<bool>();
+            spawnAnim.OnComplete = () => animationComplete.SetResult(true);
+            
+            AnimationManager.Start(spawnAnim);
+            await animationComplete.Task;
+        }
     }
 
     /// <summary>
@@ -877,9 +953,13 @@ public class GameController
 
     /// <summary>
     /// Processes a pearl hexagon match (6 pearls surrounding a center) - creates a star.
+    /// If the center is already a star, the existing star is kept and an additional star falls from the top.
     /// </summary>
     private async Task ProcessPearlHexagonMatch(HexCoordinate center)
     {
+        var centerTile = GameState.Grid.GetTile(center);
+        bool centerWasStar = centerTile?.IsStar ?? false;
+
         // Get the 6 pearl tiles around the center
         var neighborCoords = center.GetAllNeighbors();
         var tilesToEliminate = new List<HexTile>();
@@ -905,24 +985,38 @@ public class GameController
             GameState.Grid.RemoveTile(coord);
         }
 
-        // Remove center tile and create star at center
-        GameState.Grid.RemoveTile(center);
-        var starTile = _spawner.SpawnStarTile(center);
-        GameState.Grid.SetTile(center, starTile);
-        
-        if (_coordToScreen != null)
+        if (centerWasStar)
         {
-            starTile.ScreenPosition = _coordToScreen(center);
-            starTile.TargetPosition = starTile.ScreenPosition;
+            // Center is already a star: keep it, apply gravity, spawn additional star falling from top
+            GameState.AddPearlEliminationScore(6);
+            GameState.AddMatchScore(0, createdStar: true);
+            ScoreChanged?.Invoke(GameState.Score);
+
+            await ApplyGravityOnly();
+            await SpawnAdditionalStarAtTop(center);
+            await SpawnNewTiles();
         }
+        else
+        {
+            // Remove center tile and create star at center
+            GameState.Grid.RemoveTile(center);
+            var starTile = _spawner.SpawnStarTile(center);
+            GameState.Grid.SetTile(center, starTile);
+            
+            if (_coordToScreen != null)
+            {
+                starTile.ScreenPosition = _coordToScreen(center);
+                starTile.TargetPosition = starTile.ScreenPosition;
+            }
 
-        // Update score (6 pearl tiles eliminated + star bonus)
-        GameState.AddPearlEliminationScore(6);
-        GameState.AddMatchScore(0, createdStar: true); // Just add star bonus
-        ScoreChanged?.Invoke(GameState.Score);
+            // Update score (6 pearl tiles eliminated + star bonus)
+            GameState.AddPearlEliminationScore(6);
+            GameState.AddMatchScore(0, createdStar: true); // Just add star bonus
+            ScoreChanged?.Invoke(GameState.Score);
 
-        // Apply gravity and spawn new tiles
-        await ApplyGravityAndSpawn();
+            // Apply gravity and spawn new tiles
+            await ApplyGravityAndSpawn();
+        }
 
         // Check for chain reactions
         await CheckAndProcessMatches(neighborCoords);

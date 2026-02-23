@@ -33,7 +33,7 @@ public class TileSpawner
     /// <summary>
     /// Probability of spawning a bomb tile (1% = 0.01).
     /// </summary>
-    private const double BombSpawnProbability = 0.002;
+    private const double BombSpawnProbability = 0.005;
 
     /// <summary>
     /// Probability of spawning a bonus tile (5% = 0.05).

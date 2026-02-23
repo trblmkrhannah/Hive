@@ -1,6 +1,8 @@
+using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
+using Avalonia.Threading;
 using Hive.Common.Controllers;
 using Hive.Common.Models;
 using Hive.Common.Services;
@@ -41,6 +43,9 @@ public class GameCanvas : Control
     private static readonly IPen GlowMiddlePen = new Pen(new SolidColorBrush(Color.FromArgb(120, 255, 255, 255)), 5);
     private static readonly IPen GlowInnerPen = new Pen(new SolidColorBrush(Color.FromArgb(200, 255, 255, 255)), 3);
 
+    // Bomb jiggle: timer drives redraws while bombs are on the board
+    private DispatcherTimer? _bombJiggleTimer;
+
     /// <summary>
     /// The currently highlighted triplet (for visual feedback).
     /// </summary>
@@ -60,6 +65,27 @@ public class GameCanvas : Control
     {
         _controller = controller;
         _controller.AnimationManager.OnRedrawRequested = InvalidateVisual;
+        StartBombJiggleTimer();
+    }
+
+    private void StartBombJiggleTimer()
+    {
+        if (_bombJiggleTimer != null) return;
+        _bombJiggleTimer = new DispatcherTimer
+        {
+            Interval = TimeSpan.FromMilliseconds(50) // ~20 FPS for jiggle
+        };
+        _bombJiggleTimer.Tick += (_, _) =>
+        {
+            if (_controller == null || _controller.GameState.IsGameOver) return;
+            var hasBombs = false;
+            foreach (var tile in _controller.GameState.Grid.GetAllTiles())
+            {
+                if (tile.IsBomb) { hasBombs = true; break; }
+            }
+            if (hasBombs) InvalidateVisual();
+        };
+        _bombJiggleTimer.Start();
     }
 
     public override void Render(DrawingContext context)
@@ -92,6 +118,35 @@ public class GameCanvas : Control
         {
             DrawPearlTileGlow(context, HighlightedPearl.Value);
         }
+    }
+
+    /// <summary>
+    /// Returns an erratic pixel offset for bomb jiggle, based on time and tile id so each bomb moves differently.
+    /// Speed and amplitude both increase as the counter approaches explosion (more urgent and visibly agitated).
+    /// </summary>
+    private static Point GetBombJiggleOffset(HexTile tile)
+    {
+        var counter = Math.Max(1, tile.BombCounter);
+        // Amplitude: subtle when counter is high, grows as it approaches explosion (0.35 px → 2.0 px)
+        var progressToExplosion = (TileSpawner.InitialBombCounter - counter) / (double)(TileSpawner.InitialBombCounter - 1);
+        var amplitude = 0.35 + progressToExplosion * (2.0 - 0.35);
+        const double twoPi = 2.0 * Math.PI;
+        var h = tile.Id.GetHashCode();
+        var phase1 = (h % 1000) / 1000.0 * twoPi;
+        var phase2 = ((h >> 7) % 1000) / 1000.0 * twoPi;
+        var t = Environment.TickCount64 / 1000.0;
+        // Speed up jiggle as counter drops: 1x at initial, ~2.8x when counter is 1
+        var speedFactor = 1.0 + (TileSpawner.InitialBombCounter - counter) * 0.22;
+        t *= speedFactor;
+        var dx = amplitude * (
+            Math.Sin(t * 4.2 + phase1) +
+            0.6 * Math.Sin(t * 7.1 + phase2) +
+            0.35 * Math.Sin(t * 11.3 + phase1 * 2));
+        var dy = amplitude * (
+            Math.Sin(t * 3.7 + phase2) +
+            0.6 * Math.Sin(t * 6.8 + phase1) +
+            0.35 * Math.Sin(t * 9.2 + phase2 * 2));
+        return new Point(dx, dy);
     }
 
     private void CalculateLayout()
@@ -180,10 +235,12 @@ public class GameCanvas : Control
 
         context.DrawGeometry(brush, TilePen, geometry);
 
-        // Draw overlay for special tiles
+        // Draw overlay for special tiles (bomb icon + number jiggle within the tile)
         if (tile.IsBomb)
         {
-            DrawBombOverlay(context, center, size, tile.BombCounter, tile.Opacity);
+            var jiggle = GetBombJiggleOffset(tile);
+            var bombCenter = new Point(center.X + jiggle.X, center.Y + jiggle.Y);
+            DrawBombOverlay(context, bombCenter, size, tile.BombCounter, tile.Opacity);
         }
         else if (tile.IsBonus)
         {
